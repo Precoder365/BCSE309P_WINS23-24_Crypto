@@ -6,38 +6,26 @@ Select 2 large nos p and q
 n=p*q
 phi(n)=(p-1)*(q-1)
 1<e<phi(n) and gcd(phi(n),e))=1
-edmodphi(n)=1
+edmodphi(n)=1 => d=(e^-1)modphi(n)
 
 Public key={e,n}
 Private key={d,n}
 
 Encryption: C=(M^e)modn
-Decryption: M=(C^d)modn """
+Decryption: M=(C^d)modn"""
 
 import random
-
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
-
-def mod_inverse(a, m):
-    m0, x0, x1 = m, 0, 1
-    while a > 1:
-        q = a // m
-        m, a = a % m, m
-        x0, x1 = x1 - q * x0, x0
-    return x1 + m0 if x1 < 0 else x1
+import math
 
 def generate_keypair(p, q):
     n = p * q
     phi = (p - 1) * (q - 1)
 
     e = random.randrange(2, phi)
-    while gcd(phi, e) != 1:
+    while math.gcd(phi, e) != 1:
         e = random.randrange(2, phi)
     
-    d = mod_inverse(e, phi)
+    d = pow(e, -1, phi)
     
     return ((e, n), (d, n))
 
