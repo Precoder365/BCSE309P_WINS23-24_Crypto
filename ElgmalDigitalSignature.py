@@ -11,7 +11,7 @@ PublicKey->{q,alpha,Ya}
 
 m=H(m) 0<=m<=q-1
 
-1<=k<=q-1 and gcd(k,q-1)=q-1
+1<=k<=q-1 and gcd(k,q-1)=1
 
 s1=(alpha^k)modq
 s2=k^-1(m-Xa*s1)modq-1
