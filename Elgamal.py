@@ -15,36 +15,28 @@ M = (c2*s^{-1})modp
 
 import random
 
-def generate_keypair(p, g):
-    private_key = random.randint(1, p - 2)
-    public_key = pow(g, private_key, p)
-    
-    return private_key, public_key
+import random
 
-def encrypt(public_key, g, p, plaintext):
-    k = random.randint(1, p - 2) 
-    c1 = pow(g, k, p)
-    c2 = (plaintext * pow(public_key, k, p)) % p
-    
-    return c1, c2
+p=257
+g=5
 
-def decrypt(private_key, p, c1, c2):
-    plaintext = (c2 * pow(pow(c1, private_key),-1, p)) % p
-    return plaintext
+x=random.randint(2,p-2)
+y=pow(g,x,p)
 
+message=input("Enter the message to encrypt: ")
 
-p = 23  
-g = 5   
+# Encryption
 
-private_key, public_key = generate_keypair(p, g)
+k=random.randint(2,p-2)
+c1=pow(g,k,p)
+C2=[(ord(m)*pow(y,k,p))%p for m in message]
 
-print("Private key:", private_key)
-print("Public key:", public_key)
+print(c1)
+print(C2)
 
-plaintext = 7
+# Decryption
 
-c1, c2 = encrypt(public_key, g, p, plaintext)
-print("Encrypted message:", (c1, c2))
-
-decrypted_msg = decrypt(private_key, p, c1, c2)
+s = pow(c1, x, p)
+mod_inverse_s = pow(s, -1, p)
+decrypted_msg = ''.join([chr((c2 * mod_inverse_s) % p) for c2 in C2])
 print("Decrypted message:", decrypted_msg)
