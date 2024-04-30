@@ -29,51 +29,28 @@ Else: not
 import random
 import math
 
-def generate_private_key(q):
-    return random.randint(2, q - 2)
+p = 67
+g = 5
 
-def generate_public_key(q, alpha, private_key):
-    return pow(alpha, private_key, q)
+x = random.randint(2, p - 2)
+y = pow(g, x, p)
 
-def generate_signature(q, alpha, private_key, message):
-    while True:
-        k = random.randint(2, q - 2)
-        if math.gcd(k, q - 1) == 1:
-            break
+message = input("Enter message: ")
 
-    s1 = pow(alpha, k, q)
-    s2 = (pow(k, -1, q - 1) * (message - private_key * s1)) % (q - 1)
-    
-    return (s1, s2)
+k = random.randint(2, p - 2)
+while math.gcd(k, p - 1) != 1:
+    k = random.randint(2, p - 2)
 
-def verify_signature(q, alpha, public_key, message, signature):
-    s1, s2 = signature
-    v1 = pow(alpha, message, q)
-    v2 = (pow(public_key, s1, q) * pow(s1, s2, q)) % q
-    
-    return v1 == v2
+s1 = pow(g, k, p)
+S2 = [(pow(k, -1, p - 1) * (ord(m) - x * s1)) % (p - 1) for m in message]
 
-def gcd(a, b):
-    while b != 0:
-        a, b = b, a % b
-    return a
+print(s1)
+print(S2)
 
-q = 23
-alpha = 5
+v1 = [pow(g, ord(m), p) for m in message]
+v2 = [(pow(y, s1, p) * pow(s1, s2, p)) % p for s2 in S2]
 
-private_key = generate_private_key(q)
-public_key = generate_public_key(q, alpha, private_key)
-
-message = random.randint(0, q - 1)
-
-signature = generate_signature(q, alpha, private_key, message)
-
-valid_signature = verify_signature(q, alpha, public_key, message, signature)
-
-print("Prime (q):", q)
-print("Primitive Root (alpha):", alpha)
-print("Private Key:", private_key)
-print("Public Key:", public_key)
-print("Message:", message)
-print("Signature (s1, s2):", signature)
-print("Is Signature Valid?", valid_signature)
+if v1 == v2:  
+    print("Valid")
+else:
+    print("Invalid")
