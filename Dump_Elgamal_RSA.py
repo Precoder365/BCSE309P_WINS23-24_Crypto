@@ -92,25 +92,25 @@ print(decrypted_msg)
 import random
 import math
 
-q=67
-alpha=5
+p = 67
+g = 5
 
-xa=random.randint(2,q-2)
-ya=pow(alpha,xa,q)
+x = random.randint(2, p - 2)
+y = pow(g, x, p)
 
-m=int(input("Enter message: "))
+m = int(input("Enter message: "))
 
-k=random.randint(2,q-2)
-while math.gcd(k,q-1)!=1:
-    k=random.randint(2,q-2)
+k = random.randint(2, p - 2)
+while math.gcd(k, p - 1) != 1:
+    k = random.randint(2, p - 2)
 
-s1 = pow(alpha,k,q)
-s2 = (pow(k,-1,q-1)*(m-xa*s1))%(q-1)
+s1 = pow(g, k, p)
+s2 = (pow(k, -1, p - 1) * (m - x * s1)) % (p - 1)
 
-v1 = pow(alpha,m,q)
-v2 = (pow(ya,s1,q)*pow(s1,s2,q))%q
+v1 = pow(g, m, p)
+v2 = (pow(y, s1, p) * pow(s1, s2, p)) % p
 
-if(v1==v2):
+if v1 == v2:
     print("Valid")
 else:
     print("Not valid")
